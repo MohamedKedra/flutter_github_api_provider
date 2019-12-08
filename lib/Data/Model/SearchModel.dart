@@ -9,6 +9,8 @@ class SearchModel extends ChangeNotifier {
 
   String searchText;
 
+
+
   getAllItems(String search) async {
     RepoResponse response = await _repository.getRepos(search);
     items = response.items;

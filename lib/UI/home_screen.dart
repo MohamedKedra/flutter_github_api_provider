@@ -16,7 +16,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -39,7 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(fontSize: 20),
           ),
         ),
-        _searchModel.searchText != null ? buildSearchList() : Container(),
+//        _searchModel.searchText != null ? buildSearchList() : Container(),
+        _searchModel.searchText != null ? buildSearchListConsumer() : Container(),
       ],
     );
   }
@@ -67,6 +67,32 @@ class _HomeScreenState extends State<HomeScreen> {
         child: CircularProgressIndicator(),
       );
     }
+  }
+
+  buildSearchListConsumer() {
+    return Consumer<SearchModel>(
+      builder: (context, searchModel, child) {
+        if (searchModel.items != null) {
+          return ListView.builder(
+              addAutomaticKeepAlives: false,
+              scrollDirection: Axis.vertical,
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: searchModel.items.length,
+              itemBuilder: (context, index) {
+                if (searchModel.items.length > 0) {
+                  return buildRepoItem(searchModel.items[index]);
+                } else {
+                  return Center(
+                    child: Text("No Repos"),
+                  );
+                }
+              });
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 
   buildRepoItem(Item item) {
